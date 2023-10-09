@@ -1,22 +1,20 @@
+use opencv::videoio::{self, VideoCapture};
+use opencv::Result;
 
+pub struct Camera {
+    index: i32,
+    source: VideoCapture,
+}
 
-mod camera {
+impl Camera {
 
-    use opencv::videoio::{self, VideoCapture};
-    pub struct Camera {
-        index: i32,
-        source: VideoCapture,
-    }
+    pub fn new(index: i32) -> Result<Camera> {
 
-    impl Camera {
-        pub fn new(index: i32) -> Camera {
-            Camera {
-                index: index,
-                source: match VideoCapture::new(index, videoio::CAP_V4L2) {
-                    Some(device,) => device,
-                    None => None,
-                }
-            }
+        match VideoCapture::new(index, videoio::CAP_V4L2) {
+            Ok(source) => Ok(Camera { index: index, source: source }),
+            Err(error) => Err(error),
         }
+
     }
+
 }
