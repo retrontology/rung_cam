@@ -21,6 +21,6 @@ fn main() {
     let args: Cli = Cli::parse();
     let config: Config = Config::from_file(&args.config);
 
-    let index: i32 = 0;
-    let cam: Camera = Camera::new(index).unwrap_or_else(|_| panic!("Could not open video capture device at index {}", index));
+    let cam: Camera = Camera::new(config.index)
+    .unwrap_or_else(|_| panic!("Could not open video capture device at index {}", config.index));
 }
