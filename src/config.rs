@@ -1,24 +1,41 @@
-use serde::{Deserialize,de::Error};
+use serde::Deserialize;
 use std::fs;
 use std::path::Path;
 
 #[derive(Deserialize, PartialEq, Debug)]
 pub struct Config {
-    camera: CameraConfig,
+    pub camera: CameraConfig,
 }
 
 #[derive(Deserialize, PartialEq, Debug)]
 pub struct CameraConfig {
-    index: i32,
+    pub index: i32,
 }
 
 impl Config {
     
-    pub fn from_file(path: &Path) -> Result<Config, dyn Error> {
+    pub fn from_file(path: &Path) -> Config {
 
         match fs::read_to_string(&path) {
-            Ok(config) => serde_yaml::from_str(&config),
-            Err(e) => Err(e),
+            Ok(data) => {
+                match serde_yaml::from_str(&data) {
+                    Ok(config) => config,
+                    Err(error) => {
+                        panic!(
+                            "There was an issue attempting to parse the config from {}: {}",
+                            path.to_str().unwrap(),
+                            error
+                        );
+                    },
+                }
+            }
+            Err(error) => {
+                panic!(
+                    "Could not open the config file {} for reading: {}",
+                    path.to_str().unwrap(),
+                    error
+                );
+            },
         }
 
     }
