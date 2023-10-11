@@ -4,16 +4,17 @@ use std::{fs,path::Path};
 
 #[derive(Deserialize, PartialEq, Debug)]
 pub struct Config {
-    pub camera: CameraConfig,
+    camera: CameraConfig,
 }
 
 #[derive(Deserialize, PartialEq, Debug)]
 pub struct CameraConfig {
-    pub index: i32,
+    index: Option<i32>,
 }
 
 impl Config {
     
+    // Can't convert serde_yaml::Error to std::io::Error or vice versa so terminate errors here
     pub fn from_file(path: &Path) -> Config {
 
         let f = fs::read_to_string(&path);
@@ -37,4 +38,13 @@ impl Config {
         }
 
     }
+
+    fn _get_default<T>(&self, element: Option<T>, default: T) -> T {
+        match element {
+            Some(x) => x,
+            None => default,
+        }
+    }
+
+    pub fn get_camera_index(&self) -> i32 { self._get_default(self.camera.index, 1) }
 }

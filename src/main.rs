@@ -21,5 +21,5 @@ fn main() {
     let args: Cli = Cli::parse();
     let config: Config = Config::from_file(&args.config);
 
-    print!("index is {}", &config.camera.index);
+    println!("index is {}", &config.get_camera_index());
 }
