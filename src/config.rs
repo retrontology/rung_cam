@@ -37,7 +37,6 @@ impl Config {
             ),
         }
         
-
     }
 
     pub fn get_camera_conf(&self) -> &CameraConfig { &self.camera }
