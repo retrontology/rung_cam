@@ -36,8 +36,17 @@ impl Config {
                 error
             ),
         }
+        
 
     }
+
+    pub fn get_camera_conf(&self) -> &CameraConfig { &self.camera }
+    
+}
+
+impl CameraConfig {
+
+    pub fn index(&self) -> i32 { self._get_default(self.index, 0) }
 
     fn _get_default<T>(&self, element: Option<T>, default: T) -> T {
         match element {
@@ -46,5 +55,4 @@ impl Config {
         }
     }
 
-    pub fn get_camera_index(&self) -> i32 { self._get_default(self.camera.index, 1) }
 }

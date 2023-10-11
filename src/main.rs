@@ -21,5 +21,6 @@ fn main() {
     let args: Cli = Cli::parse();
     let config: Config = Config::from_file(&args.config);
 
-    println!("index is {}", &config.get_camera_index());
+    //println!("index is {}", &config.get_camera_index());
+    let camera = Camera::new(config.get_camera_conf()).expect("Could not open camera!");
 }
