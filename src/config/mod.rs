@@ -4,6 +4,22 @@ use crate::config::camera::CameraConfig;
 
 pub mod camera;
 
+pub trait Default {
+    fn get_default<T: Copy>(&self, element: Option<T>, default: T) -> T {
+        match element {
+            Some(x) => x,
+            None => default,
+        }
+    }
+
+    fn get_default_string(&self, element: &Option<String>, default: &str) -> String {
+        match element {
+            Some(x) => x.clone(),
+            None => default.to_string(),
+        }
+    }
+}
+
 #[derive(Deserialize, PartialEq, Debug)]
 pub struct Config {
     camera: CameraConfig,

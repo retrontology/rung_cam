@@ -1,3 +1,5 @@
 camera:
   index: 0
-  format: MJPG
+  fps: 30
+  resolution_width: 1920
+  resolution_height: 1080
