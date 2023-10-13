@@ -26,18 +26,26 @@ impl Config {
             ),
         };
 
-        match serde_yaml::from_str(&data) {
+        let config: Config = match serde_yaml::from_str(&data) {
             Ok(config) => config,
             Err(error) => panic!(
                 "There was an issue attempting to parse the config from {}: {}",
                 path.to_str().unwrap(),
                 error
             ),
-        }
+        };
+
+        config.verify();
+
+        config
         
     }
 
     pub fn get_camera_conf(&self) -> &CameraConfig { &self.camera }
+
+    fn verify(&self) {
+        self.camera.verify();
+    }
     
 }
 
@@ -49,10 +57,10 @@ pub struct CameraConfig {
 
 impl CameraConfig {
 
-    pub fn index(&self) -> i32 { self._get_default(self.index, DEFAULT_CAMERA_INDEX) }
+    pub fn index(&self) -> i32 { self.get_default(self.index, DEFAULT_CAMERA_INDEX) }
 
     pub fn format(&self) -> i32 {
-        let fourcc_string = self._get_default_string(&self.format, &DEFAULT_CAMERA_FORMAT);
+        let fourcc_string = self.get_default_string(&self.format, &DEFAULT_CAMERA_FORMAT);
         let fourcc_bytes = fourcc_string.as_bytes();
         let fourcc = VideoWriter::fourcc(
             fourcc_bytes[0] as char, 
@@ -66,16 +74,19 @@ impl CameraConfig {
         }
     }
 
-    
+    fn verify(&self){
+        // format
+        self.format();
+    }
 
-    fn _get_default<T: Copy>(&self, element: Option<T>, default: T) -> T {
+    fn get_default<T: Copy>(&self, element: Option<T>, default: T) -> T {
         match element {
             Some(x) => x,
             None => default,
         }
     }
 
-    fn _get_default_string(&self, element: &Option<String>, default: &str) -> String {
+    fn get_default_string(&self, element: &Option<String>, default: &str) -> String {
         match element {
             Some(x) => x.clone(),
             None => default.to_string(),

@@ -10,7 +10,7 @@ pub struct Camera {
 
 impl Camera {
 
-    pub fn new(config: &CameraConfig) -> Result<Camera> {
+    pub fn from_config(config: &CameraConfig) -> Result<Camera> {
         
         match VideoCapture::new(config.index(), videoio::CAP_V4L2) {
             Ok(source) => Ok(
