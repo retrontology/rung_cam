@@ -69,4 +69,9 @@ impl Camera {
 
     }
 
+    fn index(&self) -> i32 { self.index }
+    fn width(&self) -> i32 { self.width }
+    fn height(&self) -> i32 { self.height }
+    fn fps(&self) -> i32 { self.fps }
+    
 }
