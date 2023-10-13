@@ -7,11 +7,6 @@ pub struct Config {
     camera: CameraConfig,
 }
 
-#[derive(Deserialize, PartialEq, Debug)]
-pub struct CameraConfig {
-    index: Option<i32>,
-}
-
 impl Config {
     
     // Can't convert serde_yaml::Error to std::io::Error or vice versa so terminate errors here
@@ -43,6 +38,12 @@ impl Config {
     
 }
 
+#[derive(Deserialize, PartialEq, Debug)]
+pub struct CameraConfig {
+    index: Option<i32>,
+    format: Option<String>,
+}
+
 impl CameraConfig {
 
     pub fn index(&self) -> i32 { self._get_default(self.index, 0) }
@@ -52,6 +53,10 @@ impl CameraConfig {
             Some(x) => x,
             None => default,
         }
+    }
+
+    fn _get_default_string(&self, element: Option<String>, default: &String) -> String {
+        
     }
 
 }
