@@ -4,6 +4,7 @@ use crate::config::CameraConfig;
 
 pub struct Camera {
     index: i32,
+    fourcc: i32,
     source: VideoCapture,
 }
 
@@ -15,8 +16,8 @@ impl Camera {
             Ok(source) => Ok(
                 Camera {
                     index: config.index(),
+                    fourcc: config.format(),
                     source: source,
-
                 }
             ),
             Err(error) => Err(error),
