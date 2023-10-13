@@ -1,12 +1,13 @@
+mod buffer;
+
 use opencv::{
+    Result,
     core::Vector,
     prelude::{VideoCaptureTraitConst,VideoCaptureTrait},
     videoio::{self, VideoCapture, VideoWriter},
 };
-
-
-use opencv::Result;
 use crate::config::camera::CameraConfig;
+use crate::camera::buffer::RungBuffer;
 
 pub struct Camera {
     index: i32,
@@ -14,6 +15,7 @@ pub struct Camera {
     height: i32,
     fps: i32,
     source: VideoCapture,
+    buffer: RungBuffer,
 }
 
 impl Camera {
@@ -57,15 +59,22 @@ impl Camera {
             None => source.get(videoio::CAP_PROP_FPS)? as i32,
         };
 
+        let buffer = RungBuffer::new();
+
         let cam = Camera {
             index: config.index(),
             source: source,
             width: width,
             height: height,
             fps: fps,
+            buffer: buffer
         };
 
         Ok(cam)
+
+    }
+
+    pub fn start(&self) {
 
     }
 
