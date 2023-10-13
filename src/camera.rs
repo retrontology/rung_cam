@@ -1,6 +1,6 @@
 use opencv::videoio::{self, VideoCapture};
 use opencv::Result;
-use crate::config::CameraConfig;
+use crate::config::camera::CameraConfig;
 
 pub struct Camera {
     index: i32,

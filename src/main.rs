@@ -23,4 +23,5 @@ fn main() {
 
     let camera = Camera::from_config(config.get_camera_conf())
         .expect("Could not open camera!");
+
 }
