@@ -69,6 +69,4 @@ impl Camera {
 
     }
 
-    pub fn get_source(&self) -> &VideoCapture { &self.source }
-
 }
