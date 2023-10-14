@@ -14,10 +14,10 @@ run_rung: .rung.docker_built
 	$(DOCKER) run -v $(abspath .):/build -it $(IMG_NAME):$(VERSION) /bin/bash
 
 build.rung: .rung.docker_built
-	$(DOCKER) run -v $(abspath .):/build -it $(IMG_NAME):$(VERSION) cargo-xbuild --manifest-path=/build/Cargo.toml --target aarch64-unknown-linux-gnu
+	$(DOCKER) run -v $(abspath .):/build -it $(IMG_NAME):$(VERSION) cargo-xbuild
 
 build.rung.noit: .rung.docker_built
-	$(DOCKER) run -v $(abspath .):/build $(IMG_NAME):$(VERSION) cargo-xbuild --manifest-path=/build/Cargo.toml --target aarch64-unknown-linux-gnu
+	$(DOCKER) run -v $(abspath .):/build $(IMG_NAME):$(VERSION) cargo-xbuild
 
 clean:
 	rm -f .rung.docker_built

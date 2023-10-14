@@ -79,4 +79,4 @@ export PKG_CONFIG_SYSROOT_DIR="$RPI_ROOT"\n\
 export PKG_CONFIG_LIBDIR="$RPI_ROOT/usr/lib/aarch64-linux-gnu/pkgconfig"\n\
 export CC="clang-rpi"\n\
 export CXX="clang-rpi"\n\
-cargo build -vv --target aarch64-unknown-linux-gnu' > /usr/local/bin/cargo-xbuild && chmod +x /usr/local/bin/cargo-xbuild
+cargo build -vv --manifest-path=/build/Cargo.toml --target aarch64-unknown-linux-gnu' > /usr/local/bin/cargo-xbuild && chmod +x /usr/local/bin/cargo-xbuild
