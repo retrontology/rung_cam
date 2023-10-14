@@ -28,10 +28,7 @@ FROM scratch
 COPY --from=0 /rpi-root /
 
 RUN set -xeu && \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y && \
-    apt-get autoremove -y --purge && \
-    apt-get -y autoclean
+    apt-get update
 
 RUN set -xeu && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y symlinks
