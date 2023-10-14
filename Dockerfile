@@ -52,7 +52,7 @@ RUN set -xeu && \
 
 # Specify dependencies that you need to have on rpi
 RUN set -xeu && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y libudev-dev libsqlite3-dev libopencv-dev libstrophe-dev libcamera-dev pkg-config
+    DEBIAN_FRONTEND=noninteractive apt-get install -y libudev-dev libsqlite3-dev libopencv-dev libstrophe-dev libcamera-dev pkg-config g++-aarch64-linux-gnu
 
 RUN set -xeu && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y clang libclang-dev lld curl git build-essential pkg-config cmake
