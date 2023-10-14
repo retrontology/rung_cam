@@ -39,9 +39,20 @@ RUN set -xeu && \
 RUN set -xeu && \
     symlinks -cr /
 
+# Create the image that will be used for crosscompilation
+FROM ubuntu:22.04
+
+COPY --from=1 / /rpi-root
+
+RUN set -xeu && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y && \
+    apt-get autoremove -y --purge && \
+    apt-get -y autoclean
+
 # Specify dependencies that you need to have on rpi
 RUN set -xeu && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y libudev-dev libsqlite3-dev libopencv-dev libstrophe-dev libcamera-dev pkg-config g++-aarch64-linux-gnu
+    DEBIAN_FRONTEND=noninteractive apt-get install -y libudev-dev libsqlite3-dev libopencv-dev libstrophe-dev libcamera-dev pkg-config
 
 RUN set -xeu && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y clang libclang-dev lld curl git build-essential pkg-config cmake
@@ -50,4 +61,22 @@ RUN set -xeu && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile=minimal && \
     rm -rf /root/.rustup/tmp/* # warning: could not delete temp directory: /root/.rustup/tmp/szyc3h06vricp83o_dir
 
+RUN set -xeu && \
+    echo "[net]\ngit-fetch-with-cli = true\n[target.aarch64-unknown-linux-gnu]\nlinker = \"clang-rpi\"" > /root/.cargo/config
+
 ENV PATH="${PATH}:/root/.cargo/bin"
+
+RUN set -xeu && \
+    rustup target add aarch64-unknown-linux-gnu
+
+RUN echo '#!/bin/bash\n\
+RPI_ROOT="/rpi-root"\n\
+clang --target=aarch64-unknown-linux-gnu -fuse-ld=lld --sysroot="$RPI_ROOT" --gcc-toolchain="$RPI_ROOT" "$@"' > /usr/local/bin/clang-rpi && chmod +x /usr/local/bin/clang-rpi
+
+RUN echo '#!/bin/bash\n\
+RPI_ROOT="/rpi-root"\n\
+export PKG_CONFIG_SYSROOT_DIR="$RPI_ROOT"\n\
+export PKG_CONFIG_LIBDIR="$RPI_ROOT/usr/lib/aarch64-linux-gnu/pkgconfig"\n\
+export CC="clang-rpi"\n\
+export CXX="clang-rpi"\n\
+cargo build -vv --target aarch64-unknown-linux-gnu' > /usr/local/bin/cargo-xbuild && chmod +x /usr/local/bin/cargo-xbuild
