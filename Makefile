@@ -1,14 +1,13 @@
 VERSION  ?= latest
 DOCKER   ?= docker
-IMG_NAME ?= rung
+IMG_NAME ?= rung_cam
 
 build_rung: .rung.docker_built
 
 .rung.docker_built: Dockerfile
 	$(DOCKER) run --privileged --rm tonistiigi/binfmt --install all
 	$(DOCKER) run --rm --privileged multiarch/qemu-user-static --reset -p yes -c yes
-	docker build -t rung .
-	 $(IMG_NAME):$(VERSION) .
+	docker build -t $(IMG_NAME):$(VERSION) .
 	touch .rung.docker_built
 
 run_rung: .rung.docker_built
