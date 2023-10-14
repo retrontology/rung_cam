@@ -33,16 +33,15 @@ RUN set -xeu && \
     apt-get autoremove -y --purge && \
     apt-get -y autoclean
 
+# Specify dependencies that you need to have on rpi
+RUN set -xeu && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y libudev-dev libsqlite3-dev libopencv-dev libstrophe-dev libcamera-dev pkg-config
+
 RUN set -xeu && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y symlinks
 
 RUN set -xeu && \
     symlinks -cr /
-
-# Specify dependencies that you need to have on rpi
-RUN set -xeu && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y libudev-dev libsqlite3-dev libopencv-dev libstrophe-dev libcamera-dev pkg-config
-
 
 # Create the image that will be used for crosscompilation
 FROM ubuntu:22.04
